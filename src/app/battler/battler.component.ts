@@ -1,7 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, } from '@angular/core';
 import { BackendService } from '../services/backend.service';
-
-import { Observable } from 'rxjs';
 
 type DataType = 'people' | 'starships';
 
