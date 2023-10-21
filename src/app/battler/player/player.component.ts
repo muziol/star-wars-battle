@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, numberAttribute } from '@angular/core';
-import { PlayerModel } from 'src/app/store/battler.state';
+import { PlayerModel } from 'src/app/store/battler/battler.state';
 
 @Component({
   selector: 'app-player',
@@ -9,4 +9,5 @@ import { PlayerModel } from 'src/app/store/battler.state';
 })
 export class PlayerComponent {
   @Input() public player!: PlayerModel;
+  @Input() public loading!: boolean;
 }

@@ -6,18 +6,24 @@
     </p>
 
     <div *ngIf="dataType$ | async as dataType">
-        <mat-radio-group aria-labelledby="radio-group-label" class="-radio-group" [ngModel]="dataType">
+        <mat-radio-group aria-labelledby="radio-group-label" class="-radio-group" [ngModel]="dataType"
+            (ngModelChange)="changeDataType($event)">
             <mat-radio-button class="radio-button" *ngFor="let type of dataTypes" [value]="type">
                 {{type}}
             </mat-radio-button>
         </mat-radio-group>
     </div>
 
-    <div>
-        <button (click)="startGame()">start</button>
-    </div>
+    <ng-container *ngIf="{inProgress: inProgress$ | async, players: players$ | async, lastWinnerId: lastWinnerId$ | async} as gameConfig">
+        <div class="button-group">
+            <ng-container *ngIf="!gameConfig.inProgress">
+                <button (click)="startGame()">start</button>
+                <button (click)="clearScores()">clear score</button>
+            </ng-container>
+        </div>
 
-    <div class="battle" *ngIf="players$ | async as players">
-        <app-player [player]="player" *ngFor="let player of players"></app-player>
-    </div>
+        <div class="battle">
+            <app-player [player]="player" [loading]="gameConfig.inProgress ?? false" *ngFor="let player of gameConfig.players"></app-player>
+        </div>
+    </ng-container>
 </div>
