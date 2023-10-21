@@ -4,15 +4,20 @@
     <p>
         <label id="radio-group-label">Select people or starships</label>
     </p>
-    <mat-radio-group aria-labelledby="radio-group-label" class="-radio-group" [(ngModel)]="dataType">
-        <mat-radio-button class="radio-button" *ngFor="let type of dataTypes" [value]="type">
-            {{type}}
-        </mat-radio-button>
-    </mat-radio-group>
 
-    <div class="battle">
-        <app-player number=1></app-player>
-        <p>VS</p>
-        <app-player number=2></app-player>
+    <div *ngIf="dataType$ | async as dataType">
+        <mat-radio-group aria-labelledby="radio-group-label" class="-radio-group" [ngModel]="dataType">
+            <mat-radio-button class="radio-button" *ngFor="let type of dataTypes" [value]="type">
+                {{type}}
+            </mat-radio-button>
+        </mat-radio-group>
+    </div>
+
+    <div>
+        <button (click)="startGame()">start</button>
+    </div>
+
+    <div class="battle" *ngIf="players$ | async as players">
+        <app-player [player]="player" *ngFor="let player of players"></app-player>
     </div>
 </div>

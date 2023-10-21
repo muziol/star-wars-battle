@@ -10,6 +10,9 @@ import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { NgxsModule } from '@ngxs/store';
+import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
+import { BattlerState } from './store/battler.state';
 
 @NgModule({
   declarations: [
@@ -18,6 +21,10 @@ import { HttpClientModule } from '@angular/common/http';
     PlayerComponent
   ],
   imports: [
+    NgxsModule.forRoot([BattlerState], {
+      developmentMode: true
+    }),
+    NgxsReduxDevtoolsPluginModule.forRoot(),
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,

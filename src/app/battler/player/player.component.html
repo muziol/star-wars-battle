@@ -1,3 +1,4 @@
 <div class="player">
-    <p class="indicator">P{{number}}</p>
+    <p class="indicator">P{{player.id}} | Score: {{player.score}}</p>
+    <mat-card *ngIf="player.card"></mat-card>
 </div>

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, numberAttribute } from '@angular/core';
+import { PlayerModel } from 'src/app/store/battler.state';
 
 @Component({
   selector: 'app-player',
@@ -7,5 +8,5 @@ import { ChangeDetectionStrategy, Component, Input, numberAttribute } from '@ang
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PlayerComponent {
-  @Input({ transform: numberAttribute }) public number: number = 0;
+  @Input() public player!: PlayerModel;
 }

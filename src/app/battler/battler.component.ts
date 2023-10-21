@@ -1,7 +1,8 @@
-import { ChangeDetectionStrategy, Component, } from '@angular/core';
-import { BackendService } from '../services/backend.service';
-
-type DataType = 'people' | 'starships';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { DataType, PlayerModel } from '../store/battler.state';
+import { Players } from '../store/battler.actions';
 
 @Component({
   selector: 'app-battler',
@@ -11,7 +12,23 @@ type DataType = 'people' | 'starships';
 })
 export class BattlerComponent {
   public readonly dataTypes: DataType[] = ['people', 'starships'];
-  public dataType: DataType = 'people';
+  public dataType$!: Observable<DataType>;
 
-  constructor(private backendService: BackendService) { }
+  public players$!: Observable<PlayerModel[]>;
+
+  private gameInProgress: boolean = false;
+
+  constructor(private readonly store: Store) {
+    this.dataType$ = this.store.select(state => state.battler.dataType);
+    this.players$ = this.store.select(state => state.battler.players);
+  }
+
+  public async startGame(): Promise<void> {
+    this.gameInProgress = true;
+
+    this.store.dispatch(new Players.AddCards());
+
+    this.gameInProgress = false;
+  }
+
 }

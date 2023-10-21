@@ -1,3 +1,3 @@
-export const getRandomId = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min) + min);
+export const getIndexListFromRandomNum = (randomNum: number, min: number, max: number): number => {
+    return Math.floor(randomNum * (max - min) + min);
 }
