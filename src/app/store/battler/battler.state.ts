@@ -1,5 +1,12 @@
 import { Injectable } from '@angular/core';
-import { Action, Selector, State, StateContext, StateToken } from '@ngxs/store';
+import {
+  Action,
+  Selector,
+  State,
+  StateContext,
+  StateToken,
+  Store,
+} from '@ngxs/store';
 import { BackendService } from '../../services/backend.service';
 import {
   ChangeDataType,
@@ -86,7 +93,10 @@ const DefaultBattlerState: BattlerStateModel = {
 })
 @Injectable()
 export class BattlerState {
-  constructor(private readonly backendService: BackendService) {}
+  constructor(
+    private readonly backendService: BackendService,
+    private readonly store: Store,
+  ) {}
 
   @Selector()
   static players(state: BattlerStateModel) {

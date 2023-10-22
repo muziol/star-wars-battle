@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  numberAttribute,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { PlayerModel } from 'src/app/store/battler/battler.state';
 import { getStatusTitle } from './player.utils';
 
@@ -16,7 +11,7 @@ export type BattleStatusType = 'win' | 'loose' | 'tie' | 'none';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PlayerComponent {
-  @Input() public player!: PlayerModel;
+  @Input() public player: PlayerModel | null = null;
   @Input() public loading!: boolean;
   @Input() public status: BattleStatusType = 'none';
 

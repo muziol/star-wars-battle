@@ -7,5 +7,5 @@ import { StarshipProps } from 'src/app/store/battler';
   styleUrls: ['./starships-props.component.scss'],
 })
 export class StarshipsPropsComponent {
-  @Input() properties!: StarshipProps;
+  @Input() properties: Partial<StarshipProps> = {};
 }

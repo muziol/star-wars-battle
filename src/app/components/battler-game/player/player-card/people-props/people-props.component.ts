@@ -7,5 +7,5 @@ import { PersonProps } from 'src/app/store/battler';
   styleUrls: ['./people-props.component.scss'],
 })
 export class PeoplePropsComponent {
-  @Input() properties!: PersonProps;
+  @Input() properties: Partial<PersonProps> = {};
 }

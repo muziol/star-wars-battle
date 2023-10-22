@@ -1,5 +1,6 @@
 :host {
   width: 45%;
+  max-width: 400px;
 
   @media screen and (width < 520px) {
     width: 90%;
@@ -8,7 +9,6 @@
 
 .player {
   width: 100%;
-  height: 200px;
   color: #000;
 }
 

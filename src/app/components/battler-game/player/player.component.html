@@ -1,7 +1,10 @@
 <div class="player">
   <p class="indicator" [ngClass]="status" [title]="getStatusTitle(status)">
-    P{{ player.id }} | Score: {{ player.score }}
+    P{{ player?.id ?? "?" }} | Score: {{ player?.score ?? 0 }}
   </p>
 
-  <app-player-card [card]="player.card" [loader]="loading"></app-player-card>
+  <app-player-card
+    [card]="player?.card ?? null"
+    [loader]="loading"
+  ></app-player-card>
 </div>
