@@ -22,13 +22,17 @@ export const mapPerson = (person: APIPerson): CardPerson => {
 export const mapStarship = (ship: APIStarship): CardStarship => {
   const { uid, description, properties } = ship;
   const { crew = 0, passengers = 0, pilots, name, url } = properties;
+
   return {
     type: 'starships',
     uid,
     description,
     properties: {
-      // eg. 'unknown', '16-76', '5'
-      crew: crew !== 'unknown' ? Number(crew) : 0,
+      // eg. 'unknown', '30-165', '5', '46,000'
+      crew:
+        crew !== 'unknown'
+          ? Number(properties.crew.replaceAll(/\,|\d+\-/g, ''))
+          : 0,
       passengers: passengers !== 'unknown' ? Number(passengers) : 0,
       pilots,
       name,
