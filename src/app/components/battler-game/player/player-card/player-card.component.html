@@ -1,0 +1,29 @@
+<mat-card>
+  <ng-container *ngIf="!loader && card">
+    <mat-card-header>
+      <h3>{{ card.properties.name }}</h3>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>{{ card.description }}</p>
+      <ng-container *ngIf="card.type === 'people'">
+        <app-people-props [properties]="card.properties"></app-people-props>
+      </ng-container>
+
+      <ng-container *ngIf="card.type === 'starships'">
+        <app-starships-props
+          [properties]="card.properties"
+        ></app-starships-props>
+      </ng-container>
+    </mat-card-content>
+  </ng-container>
+
+  <ng-container *ngIf="!card || loader">
+    <mat-card-footer>
+      <div class="empty-card-msg">
+        <ng-container *ngIf="!loader"><span>Empty</span></ng-container>
+        <ng-container *ngIf="loader"><mat-spinner></mat-spinner></ng-container>
+      </div>
+    </mat-card-footer>
+  </ng-container>
+</mat-card>

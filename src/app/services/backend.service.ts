@@ -3,6 +3,7 @@ import { Observable, switchMap, of, forkJoin, catchError } from 'rxjs';
 import { getIndexListFromRandomNum } from './backend.service.utils';
 import { CardPerson, CardStarship } from '../store/battler/battler.state';
 import { BackendAPIService } from './api/backend-api.service';
+import { Store } from '@ngxs/store';
 
 type DataType = 'people' | 'starships';
 
@@ -58,7 +59,10 @@ export interface APIStarship extends APICommonProps {
   providedIn: 'root',
 })
 export class BackendService {
-  constructor(private readonly backendAPIService: BackendAPIService) {}
+  constructor(
+    private readonly backendAPIService: BackendAPIService,
+    private readonly store: Store,
+  ) {}
 
   private getRecordProps(
     type: DataType,

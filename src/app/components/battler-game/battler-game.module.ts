@@ -6,9 +6,18 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from '@angular/material/radio';
 import { FormsModule } from '@angular/forms';
+import { PlayerCardComponent } from './player/player-card/player-card.component';
+import { PeoplePropsComponent } from './player/player-card/people-props/people-props.component';
+import { StarshipsPropsComponent } from './player/player-card/starships-props/starships-props.component';
 
 @NgModule({
-  declarations: [BattlerComponent, PlayerComponent],
+  declarations: [
+    BattlerComponent,
+    PlayerComponent,
+    PlayerCardComponent,
+    PeoplePropsComponent,
+    StarshipsPropsComponent,
+  ],
   imports: [
     CommonModule,
     FormsModule,

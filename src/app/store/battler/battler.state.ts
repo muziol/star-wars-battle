@@ -20,14 +20,14 @@ interface CardCommon {
   description: string;
 }
 
-interface StarshipProps {
+export interface StarshipProps {
   crew: number;
   passengers: number;
   pilots: string[];
   name: string;
   url: string;
 }
-interface PersonProps {
+export interface PersonProps {
   height: number;
   mass: number;
   name: string;

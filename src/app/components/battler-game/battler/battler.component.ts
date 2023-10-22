@@ -1,17 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Select, Store } from '@ngxs/store';
-import {
-  BattlerState,
-  DataType,
-  PlayerModel,
-} from '../../../store/battler/battler.state';
-import {
-  ChangeDataType,
-  Players,
-} from '../../../store/battler/battler.actions';
+import { Select } from '@ngxs/store';
 import { BattleStatusType } from '../player/player.component';
 import { getPlayerStatus } from '../player/player.utils';
+import { BattlerService } from 'src/app/store/battler/battler.service';
+import { DataType, BattlerState, PlayerModel } from 'src/app/store/battler';
 
 @Component({
   selector: 'app-battler',
@@ -27,18 +20,18 @@ export class BattlerComponent {
   @Select(BattlerState.lastWinnerId) lastWinnerId$!: Observable<number>;
   @Select(BattlerState.inProgress) inProgress$!: Observable<boolean>;
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly battlerService: BattlerService) {}
 
   public async startGame(): Promise<void> {
-    this.store.dispatch(new Players.AddCards());
+    this.battlerService.addCardsToPlayers();
   }
 
   public clearScores(): void {
-    this.store.dispatch(new Players.ClearScores());
+    this.battlerService.clearPlayersScore();
   }
 
   public changeDataType(newType: DataType): void {
-    this.store.dispatch(new ChangeDataType(newType));
+    this.battlerService.changeDataType(newType);
   }
 
   public getPlayerStatus(
