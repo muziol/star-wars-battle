@@ -1,8 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { Observable, switchMap, map, of, forkJoin } from 'rxjs';
-import { getIndexListFromRandomNum, mapPerson, mapStarship } from './backend.service.utils';
+import { Observable, switchMap, map, of, forkJoin, catchError } from 'rxjs';
+import {
+  getIndexListFromRandomNum,
+  mapPerson,
+  mapStarship,
+} from './backend.service.utils';
 import { CardPerson, CardStarship } from '../store/battler/battler.state';
 
 type DataType = 'people' | 'starships';
@@ -68,46 +72,58 @@ export interface APIStarship extends APICommonProps {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BackendService {
-
   private swapiUrl = 'https://www.swapi.tech/api';
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient) {}
 
-  private getListType(type: DataType, page: number = 1, limit: number = 10): Observable<APIResponse> {
-    return this.http.get<any>(`${this.swapiUrl}/${type}?page=${page}&limit=${limit}`).pipe(
-      map(result => {
-        const { total_records, total_pages, results: records } = result;
-        return { total_records, total_pages, records };
-      })
-    );
+  private getListType(
+    type: DataType,
+    page: number = 1,
+    limit: number = 10,
+  ): Observable<APIResponse> {
+    return this.http
+      .get<any>(`${this.swapiUrl}/${type}?page=${page}&limit=${limit}`)
+      .pipe(
+        map((result) => {
+          const { total_records, total_pages, results: records } = result;
+          return { total_records, total_pages, records };
+        }),
+      );
   }
 
   private getPerson(uid: number | string): Observable<CardPerson> {
-    return this.http.get<{ result: APIPerson }>(`${this.swapiUrl}/people/${uid}`).pipe(
-      map(res => {
-        const { result } = res;
+    return this.http
+      .get<{ result: APIPerson }>(`${this.swapiUrl}/people/${uid}`)
+      .pipe(
+        map((res) => {
+          const { result } = res;
 
-        return result;
-      }),
-      map(mapPerson)
-    )
+          return result;
+        }),
+        map(mapPerson),
+      );
   }
 
   private getStarship(uid: number | string): Observable<CardStarship> {
-    return this.http.get<{ result: APIStarship }>(`${this.swapiUrl}/starships/${uid}`).pipe(
-      map(res => {
-        const { result } = res;
+    return this.http
+      .get<{ result: APIStarship }>(`${this.swapiUrl}/starships/${uid}`)
+      .pipe(
+        map((res) => {
+          const { result } = res;
 
-        return result;
-      }),
-      map(mapStarship)
-    )
+          return result;
+        }),
+        map(mapStarship),
+      );
   }
 
-  private getRecordProps(type: DataType, uid: number | string): Observable<CardStarship | CardPerson> {
+  private getRecordProps(
+    type: DataType,
+    uid: number | string,
+  ): Observable<CardStarship | CardPerson> {
     if (type === 'starships') {
       return this.getStarship(uid);
     }
@@ -115,12 +131,18 @@ export class BackendService {
     return this.getPerson(uid);
   }
 
-  private getRandomElementOfType(type: DataType): Observable<CardStarship | CardPerson> {
+  private getRandomElementOfType(
+    type: DataType,
+  ): Observable<CardStarship | CardPerson> {
     const randomNum = Math.random();
 
     return this.getListType(type).pipe(
       switchMap(({ total_records, records }) => {
-        const randomIndex = getIndexListFromRandomNum(randomNum, 0, total_records);
+        const randomIndex = getIndexListFromRandomNum(
+          randomNum,
+          0,
+          total_records,
+        );
 
         if (randomIndex < records.length - 1) {
           return of({ records: [records[randomIndex]] });
@@ -129,10 +151,18 @@ export class BackendService {
         return this.getListType(type, randomIndex + 1, 1);
       }),
       switchMap(({ records }) => this.getRecordProps(type, records[0].uid)),
-    )
+      catchError((err) => {
+        console.log(err);
+        // TODO: catch error
+        return of();
+      }),
+    );
   }
 
-  public getRandomCards(type: DataType = 'people', numberCards: number): Observable<Array<CardStarship | CardPerson>> {
+  public getRandomCards(
+    type: DataType = 'people',
+    numberCards: number,
+  ): Observable<Array<CardStarship | CardPerson>> {
     const cards = [];
     for (let i = 0; i < numberCards; i++) {
       cards.push(this.getRandomElementOfType(type));

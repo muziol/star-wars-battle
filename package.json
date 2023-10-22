@@ -6,9 +6,13 @@
     "start": "ng serve --watch",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "prepare": "husky install"
   },
   "private": true,
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  },
   "dependencies": {
     "@angular/animations": "^16.2.0",
     "@angular/cdk": "^16.2.9",
@@ -33,12 +37,15 @@
     "@ngxs/devtools-plugin": "^3.8.1",
     "@types/jasmine": "~4.3.0",
     "cypress": "^13.3.2",
+    "husky": "^8.0.3",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "lint-staged": "^15.0.2",
+    "prettier": "3.0.3",
     "typescript": "~5.1.3"
   }
 }

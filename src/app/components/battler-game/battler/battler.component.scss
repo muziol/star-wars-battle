@@ -1,0 +1,18 @@
+.container {
+  width: 100%;
+}
+
+.battle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+
+  @media screen and (width < 520px) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+.button-group {
+  min-height: 40px;
+}

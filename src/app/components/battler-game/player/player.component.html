@@ -1,0 +1,41 @@
+<div class="player">
+  <p class="indicator" [ngClass]="status" [title]="getStatusTitle(status)">
+    P{{ player.id }} | Score: {{ player.score }}
+  </p>
+
+  <mat-card *ngIf="!loading && player.card as card">
+    <mat-card-header>
+      <h3>{{ card.properties.name }}</h3>
+    </mat-card-header>
+
+    <mat-card-content>
+      <p>{{ card.description }}</p>
+      <ul>
+        <ng-container *ngIf="card.type === 'people'">
+          <li>
+            <strong>Mass: {{ card.properties.mass }}</strong>
+          </li>
+          <li>Height: {{ card.properties.height }}</li>
+          <li>Hair: {{ card.properties.hair_color }}</li>
+        </ng-container>
+
+        <ng-container *ngIf="card.type === 'starships'">
+          <li>
+            <strong>Crew: {{ card.properties.crew }}</strong>
+          </li>
+          <li>passengers: {{ card.properties.passengers }}</li>
+          <li>pilots: {{ card.properties.pilots.length }}</li>
+        </ng-container>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card *ngIf="!player.card || loading">
+    <mat-card-footer>
+      <div class="empty-card-msg">
+        <ng-container *ngIf="!loading"><span>Empty</span></ng-container>
+        <ng-container *ngIf="loading"><mat-spinner></mat-spinner></ng-container>
+      </div>
+    </mat-card-footer>
+  </mat-card>
+</div>

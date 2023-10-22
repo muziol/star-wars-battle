@@ -1,0 +1,41 @@
+:host {
+  width: 45%;
+
+  @media screen and (width < 520px) {
+    width: 90%;
+  }
+}
+
+.player {
+  width: 100%;
+  height: 200px;
+  color: #000;
+}
+
+.indicator {
+  color: #fff;
+  text-align: center;
+
+  &.win {
+    color: green;
+  }
+  &.loose {
+    color: red;
+  }
+  &.tie {
+    color: grey;
+  }
+}
+
+.content {
+  width: 100%;
+  height: 100%;
+  border: 1px solid yellow;
+}
+
+.empty-card-msg {
+  min-height: 215px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
