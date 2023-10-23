@@ -5,20 +5,17 @@ import {
   DataType,
   CardPerson,
   CardStarship,
-} from 'src/app/store/battler/battler.state';
+  APIRecord,
+} from 'src/app/store/battler';
 import { APIPerson, APIStarship } from '../backend.service';
 import { mapPerson, mapStarship } from './backend-api.utils';
 
-interface APIRecord {
-  uid: string;
-  name: string;
-  url: string;
-}
-
-interface APIResponse {
+export interface APIResponse {
   total_records: number;
   total_pages: number;
   records: APIRecord[];
+  page?: number;
+  limit?: number;
 }
 
 @Injectable({
@@ -39,7 +36,7 @@ export class BackendAPIService {
       .pipe(
         map((result) => {
           const { total_records, total_pages, results: records } = result;
-          return { total_records, total_pages, records };
+          return { total_records, total_pages, records, page, limit };
         }),
       );
   }

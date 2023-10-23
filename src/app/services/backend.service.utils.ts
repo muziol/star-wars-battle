@@ -1,7 +1,11 @@
-export const getIndexListFromRandomNum = (
-  randomNum: number,
+export const getRandomIndexesFromList = (
+  randomNumbers: number,
   min: number,
   max: number,
-): number => {
-  return Math.floor(randomNum * (max - min) + min);
+): number[] => {
+  const randomIndexes: number[] = [];
+  for (let i = 0; i < randomNumbers; i++) {
+    randomIndexes.push(Math.floor(Math.random() * (max - min) + min));
+  }
+  return randomIndexes;
 };

@@ -9,6 +9,7 @@ import { FormsModule } from '@angular/forms';
 import { PlayerCardComponent } from './player/player-card/player-card.component';
 import { PeoplePropsComponent } from './player/player-card/people-props/people-props.component';
 import { StarshipsPropsComponent } from './player/player-card/starships-props/starships-props.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { StarshipsPropsComponent } from './player/player-card/starships-props/st
     MatCardModule,
     MatRadioModule,
     MatProgressSpinnerModule,
+    MatButtonModule,
   ],
   exports: [BattlerComponent],
 })

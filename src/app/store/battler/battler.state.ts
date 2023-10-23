@@ -14,7 +14,7 @@ import {
   Players,
   SetLastWinnerId,
 } from './battler.actions';
-import { mergeMap, tap } from 'rxjs';
+import { catchError, mergeMap, of, switchMap, tap } from 'rxjs';
 import {
   addScoreToPlayer,
   getWinnerPlayer,
@@ -60,11 +60,25 @@ export interface PlayerModel {
 
 export type DataType = 'people' | 'starships';
 
+export interface APIRecord {
+  uid: string;
+  name: string;
+  url: string;
+}
+
+export interface CachedData {
+  total: number | null;
+  pages: number | null;
+  records: APIRecord[];
+}
+
 interface BattlerStateModel {
   dataType: DataType;
   players: PlayerModel[];
   lastWinnerId: number | null;
   inProgress: boolean;
+  peopleData: CachedData;
+  starshipsData: CachedData;
 }
 
 const BATTLER_STATE_TOKEN = new StateToken<BattlerStateModel>('battler');
@@ -85,6 +99,16 @@ const DefaultBattlerState: BattlerStateModel = {
   ],
   lastWinnerId: null,
   inProgress: false,
+  peopleData: {
+    total: null,
+    pages: null,
+    records: [],
+  },
+  starshipsData: {
+    total: null,
+    pages: null,
+    records: [],
+  },
 };
 
 @State<BattlerStateModel>({
@@ -134,16 +158,42 @@ export class BattlerState {
   @Action(Players.AddCards)
   addCards(ctx: StateContext<BattlerStateModel>) {
     ctx.patchState({ inProgress: true });
-    const { dataType, players } = ctx.getState();
+    const { dataType, players, peopleData, starshipsData } = ctx.getState();
+    const cachedData = dataType === 'people' ? peopleData : starshipsData;
+    const cachedDataKey = dataType === 'people' ? 'peopleData' : 'starshipData';
 
-    return this.backendService.getRandomCards(dataType, players.length).pipe(
-      tap((cards) => {
-        ctx.patchState({
-          players: mapCardsToPlayers(ctx.getState().players, cards),
-        });
-      }),
-      mergeMap(() => ctx.dispatch(new Players.CalcGameSummary())),
-    );
+    return this.backendService
+      .getListTypeWithCache(dataType, players.length, cachedData)
+      .pipe(
+        tap(({ total_pages, total_records, records }) => {
+          // TODO: cache also fetched card properties
+          ctx.patchState({
+            [cachedDataKey]: {
+              total: total_records,
+              pages: total_pages,
+              records,
+            },
+          });
+        }),
+        switchMap(({ records, randomIndexes }) => {
+          return this.backendService.getRandomCards(
+            dataType,
+            records,
+            randomIndexes,
+          );
+        }),
+        tap((cards) => {
+          ctx.patchState({
+            players: mapCardsToPlayers(ctx.getState().players, cards),
+          });
+        }),
+        mergeMap(() => ctx.dispatch(new Players.CalcGameSummary())),
+        catchError((err) => {
+          console.log(err);
+          // TODO: catch error
+          return of();
+        }),
+      );
   }
 
   @Action(Players.CalcGameSummary)

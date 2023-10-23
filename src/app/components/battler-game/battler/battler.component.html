@@ -28,10 +28,24 @@
     } as gameConfig"
   >
     <div class="button-group">
-      <ng-container *ngIf="!gameConfig.inProgress">
-        <button start-game-button (click)="startGame()">start</button>
-        <button clear-score-button (click)="clearScores()">clear score</button>
-      </ng-container>
+      <button
+        mat-button
+        color="accent"
+        start-game-button
+        (click)="startGame()"
+        [disabled]="gameConfig.inProgress"
+      >
+        start
+      </button>
+      <button
+        mat-button
+        color="warn"
+        clear-score-button
+        (click)="clearScores()"
+        [disabled]="gameConfig.inProgress"
+      >
+        clear score
+      </button>
     </div>
 
     <div class="battle">

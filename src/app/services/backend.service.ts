@@ -1,8 +1,13 @@
 import { Injectable } from '@angular/core';
-import { Observable, switchMap, of, forkJoin, catchError } from 'rxjs';
-import { getIndexListFromRandomNum } from './backend.service.utils';
-import { CardPerson, CardStarship } from '../store/battler/battler.state';
-import { BackendAPIService } from './api/backend-api.service';
+import { Observable, switchMap, of, forkJoin, catchError, tap } from 'rxjs';
+import {
+  APIRecord,
+  CachedData,
+  CardPerson,
+  CardStarship,
+} from '../store/battler';
+import { APIResponse, BackendAPIService } from './api/backend-api.service';
+import { getRandomIndexesFromList } from './backend.service.utils';
 
 type DataType = 'people' | 'starships';
 
@@ -71,42 +76,80 @@ export class BackendService {
     return this.backendAPIService.getPerson(uid);
   }
 
-  private getRandomElementOfType(
+  public getListTypeWithCache(
     type: DataType,
-  ): Observable<CardStarship | CardPerson> {
-    const randomNum = Math.random();
+    numberCards: number,
+    cache: CachedData,
+  ): Observable<APIResponse & { randomIndexes: number[] }> {
+    let obs: Observable<APIResponse>;
+    if (
+      cache.total !== null &&
+      cache.total > 0 &&
+      cache.pages !== null &&
+      cache.pages > 0
+    ) {
+      obs = of({
+        total_records: cache.total,
+        total_pages: cache.pages,
+        records: cache.records,
+      });
+    } else {
+      obs = this.backendAPIService.getListType(type);
+    }
 
-    return this.backendAPIService.getListType(type).pipe(
-      switchMap(({ total_records, records }) => {
-        const randomIndex = getIndexListFromRandomNum(
-          randomNum,
+    return obs.pipe(
+      switchMap((res) => {
+        const randomIndexes = getRandomIndexesFromList(
+          numberCards,
           0,
-          total_records,
+          res.total_records,
         );
+        const newRecords: Observable<APIResponse>[] = [];
 
-        if (randomIndex < records.length - 1) {
-          return of({ records: [records[randomIndex]] });
-        }
+        randomIndexes.forEach((index) => {
+          if (!res.records[index]) {
+            newRecords.push(
+              this.backendAPIService.getListType(type, index + 1, 1),
+            );
+          }
+        });
 
-        return this.backendAPIService.getListType(type, randomIndex + 1, 1);
+        return forkJoin({
+          res: of(res),
+          randomIndexes: of(randomIndexes),
+          newRecords: forkJoin(newRecords),
+        });
       }),
-      switchMap(({ records }) => this.getRecordProps(type, records[0].uid)),
-      catchError((err) => {
-        console.log(err);
-        // TODO: catch error
-        return of();
+      switchMap(({ res, randomIndexes, newRecords }) => {
+        const { total_pages, total_records, records } = res;
+
+        const newArray = [...records];
+
+        newRecords.forEach(({ page = 0, records: elements }) => {
+          newArray[page - 1] = elements[0];
+        });
+
+        return of({
+          total_pages,
+          total_records,
+          records: newArray,
+          randomIndexes,
+        });
       }),
     );
   }
 
   public getRandomCards(
-    type: DataType = 'people',
-    numberCards: number,
-  ): Observable<Array<CardStarship | CardPerson>> {
-    const cards = [];
-    for (let i = 0; i < numberCards; i++) {
-      cards.push(this.getRandomElementOfType(type));
-    }
+    type: DataType,
+    records: APIRecord[],
+    randomCardsIndexes: number[],
+  ): Observable<(CardPerson | CardStarship)[]> {
+    const cards: Observable<CardStarship | CardPerson>[] = [];
+
+    randomCardsIndexes.forEach((index) => {
+      cards.push(this.getRecordProps(type, records[index].uid));
+    });
+
     return forkJoin(cards);
   }
 }
