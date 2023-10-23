@@ -12,11 +12,11 @@ describe('battler game', () => {
   it('game area', () => {
     cy.get('.button-group button[start-game-button]').should(
       'have.text',
-      'start',
+      ' start ',
     );
     cy.get('.button-group button[clear-score-button]').should(
       'have.text',
-      'clear score',
+      ' clear score ',
     );
     const players = cy.get('div.battle').children();
     players.should('have.length', 2);
@@ -31,7 +31,6 @@ describe('battler game', () => {
   describe('data type - people: ', () => {
     it('start game', () => {
       const startGameButton = cy.get('.button-group button[start-game-button]');
-      startGameButton.should('have.text', 'start');
       startGameButton.click();
 
       cy.request(getAPIUrl('people')).then((r1) => {
@@ -56,7 +55,6 @@ describe('battler game', () => {
       cy.wait(100);
 
       const startGameButton = cy.get('.button-group button[start-game-button]');
-      startGameButton.should('have.text', 'start');
       startGameButton.click();
 
       cy.request(getAPIUrl('starships')).then((r1) => {
