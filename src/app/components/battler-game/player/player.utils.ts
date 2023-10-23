@@ -1,4 +1,4 @@
-import { PlayerModel } from '../../../store/battler/battler.state';
+import { PlayerModel } from 'src/app/store/battler';
 import { BattleStatusType } from './player.component';
 
 export const getPlayerStatus = (

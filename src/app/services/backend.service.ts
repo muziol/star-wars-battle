@@ -1,63 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Observable, switchMap, of, forkJoin, catchError, tap } from 'rxjs';
-import {
-  APIRecord,
-  CachedData,
-  CardPerson,
-  CardStarship,
-} from '../store/battler';
-import { APIResponse, BackendAPIService } from './api/backend-api.service';
+import { Observable, switchMap, of, forkJoin } from 'rxjs';
+import { CachedData, CardPerson, CardStarship } from '../store/battler';
+import { BackendAPIService } from './api/backend-api.service';
 import { getRandomIndexesFromList } from './backend.service.utils';
-
-type DataType = 'people' | 'starships';
-
-interface APIStarshipProps {
-  model: string;
-  starship_class: string;
-  manufacturer: string;
-  cost_in_credits: string;
-  length: string;
-  crew: string;
-  passengers: string;
-  max_atmosphering_speed: string;
-  hyperdrive_rating: string;
-  MGLT: string;
-  cargo_capacity: string;
-  consumables: string;
-  pilots: string[];
-  created: string;
-  edited: string;
-  name: string;
-  url: string;
-}
-interface APIPersonProps {
-  height: string;
-  mass: string;
-  hair_color: string;
-  skin_color: string;
-  eye_color: string;
-  birth_year: string;
-  gender: string;
-  created: string;
-  edited: string;
-  name: string;
-  homeworld: string;
-  url: string;
-}
-
-export interface APICommonProps {
-  __v: number;
-  _id: string;
-  uid: string;
-  description: string;
-}
-
-export interface APIPerson extends APICommonProps {
-  properties: APIPersonProps;
-}
-export interface APIStarship extends APICommonProps {
-  properties: APIStarshipProps;
-}
+import { APIRecord, APIResponse, DataType } from './backend.interface';
 
 @Injectable({
   providedIn: 'root',

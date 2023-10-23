@@ -4,7 +4,8 @@ import { Select } from '@ngxs/store';
 import { BattleStatusType } from '../player/player.component';
 import { getPlayerStatus } from '../player/player.utils';
 import { BattlerService } from 'src/app/store/battler/battler.service';
-import { DataType, BattlerState, PlayerModel } from 'src/app/store/battler';
+import { BattlerState, PlayerModel } from 'src/app/store/battler';
+import { DataType } from 'src/app/services/backend.interface';
 
 @Component({
   selector: 'app-battler',

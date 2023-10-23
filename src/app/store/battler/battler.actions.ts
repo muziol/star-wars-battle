@@ -1,4 +1,4 @@
-import { DataType } from './battler.state';
+import { DataType } from 'src/app/services/backend.interface';
 
 export class ChangeDataType {
   static readonly type = '[Data] Change data type';

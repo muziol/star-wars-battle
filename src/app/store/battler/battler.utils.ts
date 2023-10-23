@@ -1,8 +1,4 @@
-import { CardPerson, CardStarship, PlayerModel } from './battler.state';
-
-// comparison rules
-// for people - higher mass = better card
-// for starshiops - more crew = better card
+import { CardStarship, CardPerson, PlayerModel } from './battler.interface';
 
 export const cardIsPerson = (
   card: CardStarship | CardPerson,
@@ -15,6 +11,9 @@ export const cardIsShip = (
   return card.type === 'starships';
 };
 
+// comparison rules
+// for people - higher mass = better card
+// for starshiops - more crew = better card
 export const comparePlayersCards = (
   p1: PlayerModel,
   p2: PlayerModel,

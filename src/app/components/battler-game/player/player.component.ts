@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { PlayerModel } from 'src/app/store/battler/battler.state';
 import { getStatusTitle } from './player.utils';
+import { PlayerModel } from 'src/app/store/battler';
 
 export type BattleStatusType = 'win' | 'loose' | 'tie' | 'none';
 

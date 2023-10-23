@@ -1,22 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
+import { mapPerson, mapStarship } from './backend-api.utils';
 import {
   DataType,
-  CardPerson,
-  CardStarship,
-  APIRecord,
-} from 'src/app/store/battler';
-import { APIPerson, APIStarship } from '../backend.service';
-import { mapPerson, mapStarship } from './backend-api.utils';
-
-export interface APIResponse {
-  total_records: number;
-  total_pages: number;
-  records: APIRecord[];
-  page?: number;
-  limit?: number;
-}
+  APIResponse,
+  APIPerson,
+  APIStarship,
+} from '../backend.interface';
+import { CardPerson, CardStarship } from 'src/app/store/battler';
 
 @Injectable({
   providedIn: 'root',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngxs/store';
 import { ChangeDataType, Players } from './battler.actions';
-import { DataType } from './battler.state';
+import { DataType } from 'src/app/services/backend.interface';
 
 @Injectable({
   providedIn: 'root',

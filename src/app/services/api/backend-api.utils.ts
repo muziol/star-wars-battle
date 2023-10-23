@@ -1,5 +1,5 @@
-import { CardPerson, CardStarship } from 'src/app/store/battler/battler.state';
-import { APIPerson, APIStarship } from '../backend.service';
+import { CardPerson, CardStarship } from 'src/app/store/battler';
+import { APIPerson, APIStarship } from '../backend.interface';
 
 export const mapPerson = (person: APIPerson): CardPerson => {
   const { uid, description, properties } = person;
