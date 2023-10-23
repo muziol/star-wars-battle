@@ -22,7 +22,7 @@ export class BattlerComponent {
 
   constructor(private readonly battlerService: BattlerService) {}
 
-  public async startGame(): Promise<void> {
+  public startGame(): void {
     this.battlerService.addCardsToPlayers();
   }
 

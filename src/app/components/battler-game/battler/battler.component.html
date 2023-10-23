@@ -6,7 +6,7 @@
   <div *ngIf="dataType$ | async as dataType">
     <mat-radio-group
       aria-labelledby="radio-group-label"
-      class="-radio-group"
+      class="radio-group"
       [ngModel]="dataType"
       (ngModelChange)="changeDataType($event)"
     >
@@ -29,8 +29,8 @@
   >
     <div class="button-group">
       <ng-container *ngIf="!gameConfig.inProgress">
-        <button (click)="startGame()">start</button>
-        <button (click)="clearScores()">clear score</button>
+        <button start-game-button (click)="startGame()">start</button>
+        <button clear-score-button (click)="clearScores()">clear score</button>
       </ng-container>
     </div>
 

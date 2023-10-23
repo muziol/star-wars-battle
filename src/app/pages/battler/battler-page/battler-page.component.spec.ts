@@ -29,9 +29,7 @@ describe('BattlerPageComponent', () => {
   });
 
   it('should render title', () => {
-    fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    console.log(compiled.querySelector('.container h1')?.textContent);
     expect(compiled.querySelector('.container h1')?.textContent).toContain(
       'Star wars battler',
     );

@@ -4,14 +4,18 @@ import { CardPerson, CardStarship, PlayerModel } from './battler.state';
 // for people - higher mass = better card
 // for starshiops - more crew = better card
 
-const cardIsPerson = (card: CardStarship | CardPerson): card is CardPerson => {
+export const cardIsPerson = (
+  card: CardStarship | CardPerson,
+): card is CardPerson => {
   return card.type === 'people';
 };
-const cardIsShip = (card: CardStarship | CardPerson): card is CardStarship => {
+export const cardIsShip = (
+  card: CardStarship | CardPerson,
+): card is CardStarship => {
   return card.type === 'starships';
 };
 
-const comparePlayersCards = (
+export const comparePlayersCards = (
   p1: PlayerModel,
   p2: PlayerModel,
 ): PlayerModel | null => {
